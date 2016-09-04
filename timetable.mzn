@@ -16,6 +16,8 @@ int: numSubjects;
 % array[1..numSubjects] of string: tenA_teachers;
 set of int: tenA_teachers;
 set of int: tenB_teachers;
+set of int: nineA_teachers;
+set of int: nineB_teachers;
 
 % Now the variables - each classroom divided into the timeslots, to be filled with 'teacher IDs'
 array[slots] of var 0..numTeachers: tenA;
@@ -41,7 +43,9 @@ constraint forall(t in slots)
 % 3. Only teachers who teach a class should be listed in it for any slot
 include "among.mzn";
 constraint among(numSlots, tenA, tenA_teachers);
-% constraint among(numSlots, tenB, tenB_teachers);
+constraint among(numSlots, tenB, tenB_teachers);
+constraint among(numSlots, nineA, nineA_teachers);
+constraint among(numSlots, nineB, nineB_teachers);
 
 % PRINT OUT THE SOLUTION
 % "timeslots \t 10A \t 10B \t 9A \t 9B \n" ++ 

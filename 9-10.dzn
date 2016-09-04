@@ -25,3 +25,5 @@ numSubjects = 10;	% the no of subjects in a class
 
 tenA_teachers = {5, 7, 11, 8, 0, 2, 3, 1, 6, 4};
 tenB_teachers = {10, 7, 11, 8, 0, 2, 3, 2, 6, 4};
+nineA_teachers = {5, 7, 11, 8, 0, 2, 3, 2, 6, 4};
+nineB_teachers = {10, 9, 11, 8, 8, 2, 3, 2, 6, 4};
