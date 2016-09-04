@@ -1,4 +1,17 @@
-% We will try to make a timetable scheduler software, given certain constraints
+/* Highschool parent-teacher meet scheduler
+--------------------------------------------------------
+ * Author: Dhruv Joshi
+ * Constraint optimization in minizinc for the purpose of scheduling
+ * a parent-teacher meet. Constraints:
+ 	- Multiple teachers may teach multiple classes
+	- All classes have the PTM on the same day
+	- No two teachers can be at the same class at the same time slot
+	- Each teacher shall visit only the class they teach, and only in one timeslot
+	- empty slots are allowed
+
+ * Presently this only deals with 4 classes - 10 (A,B) and 9 (A,B) and 10 subjects 
+ * (and hence teachers) per class. The scope will be expanded to multiple classes.
+*/ 
 
 solve satisfy;
 
@@ -36,13 +49,8 @@ constraint alldifferent_except_0([nineB[i] | i in slots]);
 % 2. All teachers should be different in a particular timeslot
 %	 i.e. one teacher cannot be in two places in a particular slot
 constraint forall(t in slots)
-				  (
-				  	% if (tenA[t] < 12 \/ tenB[t] < 12 \/ nineA[t] < 12 \/ nineB[t] < 12)
-				  	% 	then 
-				  	alldifferent_except_0([tenA[t], tenB[t], nineA[t], nineB[t]])
-				  	% else true
-				  	% endif
-				  	);
+				  ( alldifferent_except_0([tenA[t], tenB[t], nineA[t], nineB[t]]) 
+				  );
 
 % 3. Only teachers who teach a class should be listed in it for any slot
 include "among.mzn";
@@ -52,7 +60,6 @@ constraint among(numSubjects, nineA, nineA_teachers);
 constraint among(numSubjects, nineB, nineB_teachers);
 
 % PRINT OUT THE SOLUTION
-% "timeslots \t 10A \t 10B \t 9A \t 9B \n" ++ 
 output["----------------------------------------------\ntimeslots\t10A\t10B\t9A\t9B\n----------------------------------------------\n" 
 	++ 
 	concat(
