@@ -34,6 +34,10 @@ constraint alldifferent([nineA[i] | i in slots]);
 constraint alldifferent([nineB[i] | i in slots]);
 
 % 2. All teachers should be different in a particular slot
+constraint forall(t in slots)
+				  (
+				  		alldifferent([tenA[t], tenB[t], nineA[t], nineB[t]])
+				  	);
 
 % 3. Only teachers who teach a class should be listed in it for any slot
 
