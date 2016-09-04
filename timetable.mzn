@@ -26,27 +26,38 @@ array[slots] of var 0..numTeachers: nineA;
 array[slots] of var 0..numTeachers: nineB;
 
 % CONSTRAINTS
-% 1. All should be different in a class
-include "alldifferent.mzn";
-constraint alldifferent([tenA[i] | i in slots]);
-constraint alldifferent([tenB[i] | i in slots]);
-constraint alldifferent([nineA[i] | i in slots]);
-constraint alldifferent([nineB[i] | i in slots]);
+% 1. All should be different in a class, except the 0 case which is a free slot
+include "alldifferent_except_0.mzn";
+constraint alldifferent_except_0([tenA[i] | i in slots]);
+constraint alldifferent_except_0([tenB[i] | i in slots]);
+constraint alldifferent_except_0([nineA[i] | i in slots]);
+constraint alldifferent_except_0([nineB[i] | i in slots]);
 
 % 2. All teachers should be different in a particular timeslot
 %	 i.e. one teacher cannot be in two places in a particular slot
 constraint forall(t in slots)
 				  (
-				  		alldifferent([tenA[t], tenB[t], nineA[t], nineB[t]])
+				  	% if (tenA[t] < 12 \/ tenB[t] < 12 \/ nineA[t] < 12 \/ nineB[t] < 12)
+				  	% 	then 
+				  	alldifferent_except_0([tenA[t], tenB[t], nineA[t], nineB[t]])
+				  	% else true
+				  	% endif
 				  	);
 
 % 3. Only teachers who teach a class should be listed in it for any slot
 include "among.mzn";
-constraint among(numSlots, tenA, tenA_teachers);
-constraint among(numSlots, tenB, tenB_teachers);
-constraint among(numSlots, nineA, nineA_teachers);
-constraint among(numSlots, nineB, nineB_teachers);
+constraint among(numSubjects, tenA, tenA_teachers);
+constraint among(numSubjects, tenB, tenB_teachers);
+constraint among(numSubjects, nineA, nineA_teachers);
+constraint among(numSubjects, nineB, nineB_teachers);
 
 % PRINT OUT THE SOLUTION
 % "timeslots \t 10A \t 10B \t 9A \t 9B \n" ++ 
-output["\(timeSlots[i])\t\(teachers[tenA[i]+1])\t\(teachers[tenB[i]+1])\t\(teachers[nineA[i]+1])\t\(teachers[nineB[i]+1])\n" | i in slots];
+output["----------------------------------------------\ntimeslots\t10A\t10B\t9A\t9B\n----------------------------------------------\n" 
+	++ 
+	concat(
+		["\(timeSlots[i])\t\(teachers[tenA[i]+1])\t\(teachers[tenB[i]+1])\t\(teachers[nineA[i]+1])\t\(teachers[nineB[i]+1])\n" | i in slots]
+		)
+	++
+	"----------------------------------------------\n"
+	];
