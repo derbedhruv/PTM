@@ -17,8 +17,11 @@ teachers = ["AA", "CJ", "NS", "PA", "JS", "MJ", "SK", "AP", "VS", "SWP", "SB", "
 % teacher IDs 0		1	 2		3	 4		5	 6		7	 8		9	  10	11
 
 numSubjects = 10;	% the no of subjects in a class
+
 % tenA_teachers = ["MJ", "AP", "RO", "VS", "AA", "NS", "PA", "CJ", "SK", "JS"];
 % tenB_teachers = ["SB", "AP", "RO", "VS", "AA", "NS", "PA", "NS", "SK", "JS"];
 % nineA_teachers = ["MJ", "AP", "RO", "VS", "AA", "NS", "PA", "NS", "SK", "JS"];
 % nineB_teachers = ["SB", "SWP", "RO", "VS", "VS", "NS", "PA", "NS", "SK", "JS"];
+
 tenA_teachers = {5, 7, 11, 8, 0, 2, 3, 1, 6, 4};
+tenB_teachers = {10, 7, 11, 8, 0, 2, 3, 2, 6, 4};
