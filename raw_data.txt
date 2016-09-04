@@ -1,0 +1,10 @@
+legend 	= {CT, 	Eng, 	Hindi, 	Math, 	Hist,	Geog,	Phy, 	Chem,	Bio,	Comp,	Commerce}
+10A 	= {VS,	MJ,		AP,		RO,		VS,		AA,		NS,		PA,		CJ,		SK,		JS	}
+10B		= {SB,	SB,		AP,		RO,		VS,		AA,		NS,		PA,		NS,		SK,		JS	}
+9A		= {PA,	MJ,		AP,		RO,		VS,		AA,		NS,		PA,		NS,		SK,		JS	}
+9B		= {SWP,	SB,		SWP,	RO,		VS,		VS,		NS,		PA,		NS,		SK,		JS	}
+
+tena = ['VS', 'MJ', 'AP', 'RO', 'VS', 'AA', 'NS', 'PA', 'CJ', 'SK', 'JS']
+tenb = ['SB', 'SB', 'AP', 'RO', 'VS', 'AA', 'NS', 'PA', 'NS', 'SK', 'JS']
+ninea = ['PA', 'MJ', 'AP', 'RO', 'VS', 'AA', 'NS', 'PA', 'NS', 'SK', 'JS']
+nineb = ['SWP', 'SB', 'SWP', 'RO', 'VS', 'VS', 'NS', 'PA', 'NS', 'SK', 'JS']
