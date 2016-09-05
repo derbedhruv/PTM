@@ -25,7 +25,11 @@ num_avatars = 15;	% the union of all teachers of all classes, including the "no"
 
 % This is the "avatars" of teachers, which means one teacher may come twice since they teach multiple subjects
 teacher_avatars = ["--", "AA", "CJ", "NS", "PA", "JS", "MJ", "SK", "AP", "VS", "SWP", "SB", "RO", "VS", "NS"];
-% teacher IDs 0		1	 2		3	 4	 	5	 6	 	7	 8		9	 10	  	11	  12	13	  14
+% teacher IDs 		0	   1	 2		3	 4	  5	 	6	   7	 8	   9	 10	   11	 12	   13	 14
+
+% coordinators = ["AA", "MJ"];
+numCoordinators = 2;
+coordinators = [1, 6];
 
 numSubjects = 10;	% the no of subjects in a class
 
