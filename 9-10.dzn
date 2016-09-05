@@ -35,10 +35,12 @@ coordinators = [1, 6];
 
 numSubjects = 10;	% the no of subjects in a class
 
-% tenA_teachers = ["MJ", "AP", "RO", "VS", "AA", "NS", "PA", "CJ", "SK", "JS"];
-% tenB_teachers = ["SB", "AP", "RO", "VS", "AA", "NS", "PA", "NS", "SK", "JS"];
-% nineA_teachers = ["MJ", "AP", "RO", "VS", "AA", "NS", "PA", "NS", "SK", "JS"];
-% nineB_teachers = ["SB", "SWP", "RO", "VS", "VS", "NS", "PA", "NS", "SK", "JS"];
+/*
+tenA_teachers = ["MJ", "AP", "RO", "VS", "AA", "NS", "PA", "CJ", "SK", "JS"];
+tenB_teachers = ["SB", "AP", "RO", "VS", "AA", "NS", "PA", "NS", "SK", "JS"];
+nineA_teachers = ["MJ", "AP", "RO", "VS", "AA", "NS", "PA", "NS", "SK", "JS"];
+nineB_teachers = ["SB", "SWP", "RO", "VS", "VS", "NS", "PA", "NS", "SK", "JS"];
+*/
 
 teachers_assignments = [{6, 8, 12, 9, 1, 3, 4, 2, 7, 5},
 						{11, 8, 12, 9, 1, 3, 4, 14, 7, 5},

@@ -80,9 +80,9 @@ var int: obj = sum(c in coordinators, j in 1..numSubjects)(if (tenA[j] == c) the
 */
 
 % PRINT OUT THE SOLUTION
-output["----------------------------------------------\ntimeslots\t"
+output["------------------------------------------------------------\ntimeslots\t"
 	++ concat([ "\(class_names[c])\t" | c in 1..numClasses ])
-	++ "\n----------------------------------------------" 
+	++ "\n------------------------------------------------------------" 
 	++ 
 	concat(
 	%	["\(timeSlots[i])\t\(teacher_avatars[tenA[i]+1])\t\(teacher_avatars[tenB[i]+1])\t\(teacher_avatars[nineA[i]+1])\t\(teacher_avatars[nineB[i]+1])\n" | i in slots]
@@ -91,5 +91,5 @@ output["----------------------------------------------\ntimeslots\t"
 	%	["\(timetable[i,j])" | j in slots, i in 1..numClasses]
 		)
 	++
-	"\n----------------------------------------------\n"
+	"\n------------------------------------------------------------\n"
 	];
