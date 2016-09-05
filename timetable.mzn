@@ -25,6 +25,7 @@ array[slots] of string: timeSlots;
 int: num_avatars;	% this also acts as the primary key for teachers
 int: numCoordinators;
 array[1..num_avatars] of string: teacher_avatars;
+array[1..num_avatars] of int: teacher_ids;
 array[1..numCoordinators] of int: coordinators;
 
 % definitions of arrays keeping track of teachers of various classes
@@ -52,7 +53,7 @@ constraint alldifferent_except_0([nineB[i] | i in 1..numSubjects]);
 % 2. All teachers should be different in a particular timeslot
 %	 i.e. one teacher cannot be in two places in a particular slot
 constraint forall(t in slots)
-				  ( alldifferent_except_0([tenA[t], tenB[t], nineA[t], nineB[t]]) 
+				  ( alldifferent_except_0([teacher_ids[tenA[t]], teacher_ids[tenB[t]], teacher_ids[nineA[t]], teacher_ids[nineB[t]]]) 
 				  );
 
 % 3. Only teachers who teach a class should be listed in it for any slot
@@ -69,6 +70,10 @@ constraint tenB[2] = 1;
 constraint nineA[3] = 1;
 constraint tenA[2] = 6;
 constraint nineA[1] = 6;
+
+% 5. No 3 consecutive slots by the same teacher
+% constraint forall(sl in 1..numSlots-1)();
+
 /*
 % minimization version of the problem - give coordinators early slots
 var int: obj = sum(c in coordinators, j in 1..numSubjects)(if (tenA[j] == c) then j else 0 endif) 
