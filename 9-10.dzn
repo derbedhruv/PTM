@@ -11,14 +11,23 @@ timeSlots = ["8:50 - 9:00",
 			"9:50 - 10:00", 
 			"10:00 - 10:10", 
 			"10:10 - 10:20",
-			"10:20 - 10:30"];
+			"10:20 - 10:30"
+	%		"10:30 - 10:40",
+	%		"10:40 - 10:50"
+	%		"10:50 - 11:00",
+	%		"11:00 - 11:10",
+	%		"11:10 - 11:20",
+	%		"11:20 - 11:30"
+	];
 
 
-numTeachers = 13;	% the union of all teachers of all classes, including the "no" teacher '--'
-teachers = ["--", "AA", "CJ", "NS", "PA", "JS", "MJ", "SK", "AP", "VS", "SWP", "SB", "RO"];
-% teacher IDs 0		1	 2		3	 4		5	 6		7	 8		9	  10	11	  12
+num_avatars = 15;	% the union of all teachers of all classes, including the "no" teacher '--'
 
-numSubjects = 8;	% the no of subjects in a class
+% This is the "avatars" of teachers, which means one teacher may come twice since they teach multiple subjects
+teacher_avatars = ["--", "AA", "CJ", "NS", "PA", "JS", "MJ", "SK", "AP", "VS", "SWP", "SB", "RO", "VS", "NS"];
+% teacher IDs 0		1	 2		3	 4	 	5	 6	 	7	 8		9	 10	  	11	  12	13	  14
+
+numSubjects = 10;	% the no of subjects in a class
 
 % tenA_teachers = ["MJ", "AP", "RO", "VS", "AA", "NS", "PA", "CJ", "SK", "JS"];
 % tenB_teachers = ["SB", "AP", "RO", "VS", "AA", "NS", "PA", "NS", "SK", "JS"];
@@ -27,6 +36,6 @@ numSubjects = 8;	% the no of subjects in a class
 
 
 tenA_teachers = {6, 8, 12, 9, 1, 3, 4, 2, 7, 5};
-tenB_teachers = {11, 8, 12, 9, 1, 3, 4, 3, 7, 5};
-nineA_teachers = {6, 8, 12, 9, 1, 3, 4, 3, 7, 5};
-nineB_teachers = {11, 10, 12, 9, 9, 3, 4, 3, 7, 5};
+tenB_teachers = {11, 8, 12, 9, 1, 3, 4, 14, 7, 5};
+nineA_teachers = {6, 8, 12, 9, 1, 3, 4, 14, 7, 5};
+nineB_teachers = {11, 10, 12, 9, 13, 3, 4, 14, 7, 5};
