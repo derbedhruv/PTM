@@ -16,6 +16,9 @@
 % solve minimize obj;
 solve satisfy;
 
+int: numClasses;
+array[1..numClasses] of string: class_names;
+
 int: numSlots;
 set of int: slots = 1..numSlots;
 array[slots] of string: timeSlots;
@@ -30,46 +33,40 @@ array[1..numCoordinators] of int: coordinators;
 
 % definitions of arrays keeping track of teachers of various classes
 int: numSubjects;
-% array[1..numSubjects] of string: tenA_teachers;
-set of int: tenA_teachers;
-set of int: tenB_teachers;
-set of int: nineA_teachers;
-set of int: nineB_teachers;
 
 % Now the variables - each classroom divided into the timeslots, to be filled with 'teacher IDs'
-array[slots] of var 0..num_avatars: tenA;
-array[slots] of var 0..num_avatars: tenB;
-array[slots] of var 0..num_avatars: nineA;
-array[slots] of var 0..num_avatars: nineB;
+array[1..numClasses, slots] of var 0..num_avatars: timetable;
+array[1..numClasses] of set of int: teachers_assignments;
 
 % CONSTRAINTS
 % 1. All should be different in a class, except the 0 case which is a free slot
 include "alldifferent_except_0.mzn";
-constraint alldifferent_except_0([tenA[i] | i in 1..numSubjects]);
-constraint alldifferent_except_0([tenB[i] | i in 1..numSubjects]);
-constraint alldifferent_except_0([nineA[i] | i in 1..numSubjects]);
-constraint alldifferent_except_0([nineB[i] | i in 1..numSubjects]);
+constraint forall(i in 1..numClasses) (alldifferent_except_0([ timetable[i, j] | j in slots ]));
 
 % 2. All teachers should be different in a particular timeslot
 %	 i.e. one teacher cannot be in two places in a particular slot
-constraint forall(t in slots)
-				  ( alldifferent_except_0([teacher_ids[tenA[t]], teacher_ids[tenB[t]], teacher_ids[nineA[t]], teacher_ids[nineB[t]]]) 
+constraint forall(j in slots)
+				  ( 
+				  	%alldifferent_except_0([teacher_ids[tenA[t]], teacher_ids[tenB[t]], teacher_ids[nineA[t]], teacher_ids[nineB[t]]]
+				  	alldifferent_except_0([ timetable[i, j] | i in 1..numClasses ])
 				  );
 
 % 3. Only teachers who teach a class should be listed in it for any slot
 include "among.mzn";
-constraint among(numSubjects, tenA, tenA_teachers);
-constraint among(numSubjects, tenB, tenB_teachers);
-constraint among(numSubjects, nineA, nineA_teachers);
-constraint among(numSubjects, nineB, nineB_teachers);
+constraint forall(i in 1..numClasses)
+					(
+						among( numSubjects, [ timetable[i, j] | j in slots ], teachers_assignments[i] )
+						);
 
 % 4. coordinators should get early slots - will be 'manually' given by python program
 % hardcoded version
+/*
 constraint tenA[1] = 1;
 constraint tenB[2] = 1;
 constraint nineA[3] = 1;
 constraint tenA[2] = 6;
 constraint nineA[1] = 6;
+*/
 
 % 5. No 3 consecutive slots by the same teacher
 % constraint forall(sl in 1..numSlots-1)();
@@ -83,12 +80,16 @@ var int: obj = sum(c in coordinators, j in 1..numSubjects)(if (tenA[j] == c) the
 */
 
 % PRINT OUT THE SOLUTION
-output["----------------------------------------------\ntimeslots\t10A\t10B\t9A\t9B\n----------------------------------------------\n" 
+output["----------------------------------------------\ntimeslots\t"
+	++ concat([ "\(class_names[c])\t" | c in 1..numClasses ])
+	++ "\n----------------------------------------------" 
 	++ 
 	concat(
-		["\(timeSlots[i])\t\(teacher_avatars[tenA[i]+1])\t\(teacher_avatars[tenB[i]+1])\t\(teacher_avatars[nineA[i]+1])\t\(teacher_avatars[nineB[i]+1])\n" | i in slots]
+	%	["\(timeSlots[i])\t\(teacher_avatars[tenA[i]+1])\t\(teacher_avatars[tenB[i]+1])\t\(teacher_avatars[nineA[i]+1])\t\(teacher_avatars[nineB[i]+1])\n" | i in slots]
 	%	["\(timeSlots[i])\t\(tenA[i])\t\(tenB[i])\t\(nineA[i])\t\(nineB[i])\n" | i in slots]
+		["\n\(timeSlots[j])\t" ++ concat(["\(teacher_avatars[timetable[i, j]+1])\t" | i in 1..numClasses ]) | j in slots]
+	%	["\(timetable[i,j])" | j in slots, i in 1..numClasses]
 		)
 	++
-	"----------------------------------------------\n"
+	"\n----------------------------------------------\n"
 	];
