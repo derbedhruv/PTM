@@ -100,7 +100,8 @@ constraint forall(i in 1..numClasses)
 						);
 
 
-% PRINT OUT THE SOLUTION
+% PRINT OUT THE SOLUTION FOR HUMANS ON TERMINAL
+/*
 output["------------------------------------------------------------\ntimeslots\t"
 	++ concat([ "\(class_names[c])\t" | c in 1..numClasses ])
 	++ "\n------------------------------------------------------------" 
@@ -114,4 +115,18 @@ output["------------------------------------------------------------\ntimeslots\
 		)
 	++
 	"\n------------------------------------------------------------\n"
+	];
+*/
+
+% PRINT OUT THE SOLUTION FOR PYTHON TO CONVERT INTO AN EXCEL SHEET
+output[
+		% first print the no of classes and slots, tab seperated
+		"\(numClasses)\t\(numSlots)\n"
+
+		% then the names of classes
+	++	concat([ "\(class_names[c])\t" | c in 1..numClasses ])
+
+		% then print, in order, each class's teacher assignments
+	++	concat(["\n" ++ concat(["\(teacher_ids[timetable[i, j]+1])\t" | j in slots ]) | i in 1..numClasses])
+		
 	];
