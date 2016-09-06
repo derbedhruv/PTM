@@ -14,6 +14,8 @@ import xlrd
 def calculate_timetable(excel_file_input):
 	print "reading in..."
 
+	current_directory = os.path.dirname(os.path.abspath(__file__))
+
 	## READ INPUTS FROM XLSX FILE
 	wb = xlrd.open_workbook(excel_file_input)		# name is fixed
 	ws = wb.sheet_by_index(0)							# Sheet1 is fixed
@@ -64,7 +66,7 @@ def calculate_timetable(excel_file_input):
 
 
 	## Generate the dzn file
-	f_dzn = open('data.dzn', 'w')
+	f_dzn = open(os.path.join(current_directory, 'data.dzn'), 'w')
 	f_dzn.write('numSlots = ' + str(numSlots) + ';\n')
 
 	# TODO: write the timeslots using a for loop
@@ -132,12 +134,12 @@ def calculate_timetable(excel_file_input):
 	# And dump the contents into a file out.txt
 	print "running model on minizinc..."
 	import subprocess
-	subprocess.call([os.path.join(os.path.dirname(os.path.abspath(__file__)), 'runmzn.sh')])
+	subprocess.call([os.path.join(current_directory, 'runmzn.sh')])
 
 	print "success! Now generating the excel file..."
 
 	## READ IN INPUTS FROM MZN OUTPUT FILE
-	f = open('out.txt')
+	f = open(os.path.join(current_directory,'out.txt'))
 
 	# Then we read each class's assignments in order
 	teachers = []	# will be a list of lists, containing each class's teacher assignments
@@ -148,7 +150,7 @@ def calculate_timetable(excel_file_input):
 
 	## GENERATE EXCEL FILE REPRESENTATION OF THE SAME
 	wb = Workbook()
-	filename = './uploaded/timetable.xlsx'
+	filename = 'uploaded/timetable.xlsx'
 
 	ws = wb.active
 	ws.title = "PTM_assignments"
@@ -158,7 +160,7 @@ def calculate_timetable(excel_file_input):
 	for j in range(numSlots):
 		ws.append([time_slots[j]] + [ id2t[int(teachers[i][j])] for i in range(numClasses) ])
 
-	wb.save(filename = filename)
+	wb.save(filename = os.path.join(current_directory, filename))
 
 
 	print "Finished! Please check the file timetable.xlsx for the final output!"
