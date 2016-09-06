@@ -16,15 +16,15 @@ ws = wb.sheet_by_index(0)							# Sheet1 is fixed
 
 classes = map(str, ws.row_values(0))[1:]			# list of classes, first col is label 'Subject'
 numClasses = len(classes)
+numSlots = numClasses + 2		# arbitrary and emperical
 
 # initialize teachers_assignments, an empty list numClasses no of lists
 teachers_assignments = [[] * 1 for i in range(numClasses)]
+teacher_avatars = []
 
 # Now we read in row by row, ignoring the first col
-# Read into two dictionaries - 
-# one will map ['teacher names'] to teacher_id
-# another will map teacher_id to ['teacher names'] <--- this one will map more than one ID to a name, allowing for multiple teacher avatars
-t2id = {}
+# Read into a dictionary - which will map teacher_id to ['teacher names'] 
+# this one will map more than one ID to a name, allowing for multiple teacher avatars
 id2t = {}
 
 # initialize the EMPTY category (empty slot) with ID 0  (dummy teacher avatar)
@@ -40,13 +40,27 @@ for r in range(1, ws.nrows):
 		if (teacher != ''):
 			t_id += 1
 			id2t[t_id] = teacher
+			teacher_avatars.append(teacher)
 			# And now we append the current teacher_id into the list keeping track of it
 			teachers_assignments[classID].append(t_id)
 
-# iterate through the rows, go column-wise and only pick values which are not 'None'
-for col in ws.rows:
-    for cell in row:
-        print(cell.value)
+## Generate the dzn file
+f_dzn = open('data.dzn', 'w')
+f_dzn.write('numSlots = ' + str(numSlots) + '\n')
+
+# TODO: write the timeslots using a for loop
+
+# write teacher avatars
+f_dzn.write('num_avatars = ' + str(t_id) + '\n')
+f_dzn.write('teacher_avatars = {')
+for avatar in teacher_avatars:
+	f_dzn.write(avatar + ', ')
+f_dzn.write('}\n')
+
+# TODO: How to handle coordinators, special cases?
+
+# subjects
+f_dzn.write('numSubjects = ')
 
 ## READ IN INPUTS FROM MZN OUTPUT FILE
 f = open('out.txt')
