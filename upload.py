@@ -5,7 +5,7 @@ from werkzeug.utils import secure_filename
 from flask import send_from_directory
 from gen_timetable_mzn import calculate_timetable
 
-UPLOAD_FOLDER = './uploaded/'
+UPLOAD_FOLDER = 'uploaded/'
 ALLOWED_EXTENSIONS = set(['xlsx'])		# only XLSX allowed, as that's what we'll be working with
 
 app = Flask(__name__)
@@ -33,7 +33,7 @@ def upload_file():
             file.save(os.path.join(os.path.dirname(os.path.abspath(__file__)), app.config['UPLOAD_FOLDER'], filename))
 
             # Now that the file is saved in ./uploaded/, we run the code on it
-            calculate_timetable(os.path.join(os.path.dirname(os.path.abspath(__file__)), os.path.join(os.path.dirname(os.path.abspath(__file__)),app.config['UPLOAD_FOLDER']), filename))
+            calculate_timetable(os.path.join(os.path.dirname(os.path.abspath(__file__)),app.config['UPLOAD_FOLDER'], filename))
 
             return redirect(url_for('uploaded_file',
                                     filename='timetable.xlsx'))
