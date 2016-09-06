@@ -75,6 +75,7 @@ constraint forall(j in 1..numSlots-3)
 			(
 				forall(t in 1..num_avatars)
 				(
+					% counting constraints from https://www.minizinc.org/2.0/doc-lib/doc-globals-counting.html
 					among([teacher_ids[timetable[i, j]  +1] | i in 1..numClasses], {t})
 				+	among([teacher_ids[timetable[i, j+1]+1] | i in 1..numClasses], {t})
 				+	among([teacher_ids[timetable[i, j+2]+1] | i in 1..numClasses], {t})
@@ -90,6 +91,12 @@ constraint forall(i in 1..numClasses, j in 1..numSlots-1)
 						then not (timetable[i, j+1] == 0)
 						else true
 						endif
+						);
+
+% first slot cannot be an empty slot
+constraint forall(i in 1..numClasses)
+					(
+						not (timetable[i, 1] == 0)
 						);
 
 
