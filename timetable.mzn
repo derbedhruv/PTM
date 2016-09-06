@@ -122,6 +122,7 @@ output["------------------------------------------------------------\ntimeslots\
 % PRINT OUT THE SOLUTION FOR PYTHON TO CONVERT INTO AN EXCEL SHEET
 output[
 		% print, in order, each class's teacher assignments
-		concat(["\n" ++ concat(["\(teacher_ids[timetable[i, j]+1])\t" | j in slots ]) | i in 1..numClasses])
+		concat(["\(timeSlots[i])\t" | i in slots])
+	++	concat(["\n" ++ concat(["\(teacher_ids[timetable[i, j]+1])\t" | j in slots ]) | i in 1..numClasses])
 	++	"\n"			
 	];

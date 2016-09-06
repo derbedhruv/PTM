@@ -139,7 +139,7 @@ f = open('out.txt')
 
 # Then we read each class's assignments in order
 teachers = []	# will be a list of lists, containing each class's teacher assignments
-f.readline()		# dummy first line
+time_slots = f.readline().strip().split()		# read in the timeslots from the out.txt file itself
 
 for cl in range(numClasses):
 	teachers.append(f.readline().strip().split())
@@ -152,9 +152,9 @@ ws = wb.active
 ws.title = "PTM_assignments"
 
 # start appending line by line
-ws.append(classes)		# names of classes
+ws.append([""] + classes)		# names of classes
 for j in range(numSlots):
-	ws.append([ id2t[int(teachers[i][j])] for i in range(numClasses) ])
+	ws.append([time_slots[j]] + [ id2t[int(teachers[i][j])] for i in range(numClasses) ])
 
 wb.save(filename = filename)
 
