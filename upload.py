@@ -30,10 +30,10 @@ def upload_file():
             return redirect(request.url)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            file.save(os.path.join(os.path.dirname(os.path.abspath(__file__)), app.config['UPLOAD_FOLDER'], filename))
 
             # Now that the file is saved in ./uploaded/, we run the code on it
-            calculate_timetable(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            calculate_timetable(os.path.join(os.path.dirname(os.path.abspath(__file__)), app.config['UPLOAD_FOLDER'], filename))
 
             return redirect(url_for('uploaded_file',
                                     filename='timetable.xlsx'))
