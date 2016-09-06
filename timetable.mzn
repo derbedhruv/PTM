@@ -12,6 +12,7 @@
  * Presently this only deals with 4 classes - 10 (A,B) and 9 (A,B) and 10 subjects 
  * (and hence teachers) per class. The scope will be expanded to multiple classes.
 */ 
+include "globals.mzn"; % standard
 
 % solve minimize obj;
 solve satisfy;
@@ -48,7 +49,7 @@ constraint forall(i in 1..numClasses) (alldifferent_except_0([ timetable[i, j] |
 constraint forall(j in slots)
 				  ( 
 				  	%alldifferent_except_0([teacher_ids[tenA[t]], teacher_ids[tenB[t]], teacher_ids[nineA[t]], teacher_ids[nineB[t]]]
-				  	alldifferent_except_0([ timetable[i, j] | i in 1..numClasses ])
+				  	alldifferent_except_0([ teacher_ids[timetable[i, j]+1] | i in 1..numClasses ])
 				  );
 
 % 3. Only teachers who teach a class should be listed in it for any slot
@@ -58,7 +59,8 @@ constraint forall(i in 1..numClasses)
 						among( numSubjects, [ timetable[i, j] | j in slots ], teachers_assignments[i] )
 						);
 
-% 4. coordinators should get early slots - will be 'manually' given by python program
+% 4. coordinators should get early slots - will be 'manually' given by python program to speed things up
+%	 since there are very few no of coordinators
 % hardcoded version
 /*
 constraint tenA[1] = 1;
@@ -68,16 +70,28 @@ constraint tenA[2] = 6;
 constraint nineA[1] = 6;
 */
 
-% 5. No 3 consecutive slots by the same teacher
-% constraint forall(sl in 1..numSlots-1)();
+% 5. No 3 consecutive slots for the same teacher
+constraint forall(j in 1..numSlots-3)
+			(
+				forall(t in 1..num_avatars)
+				(
+					among([teacher_ids[timetable[i, j]  +1] | i in 1..numClasses], {t})
+				+	among([teacher_ids[timetable[i, j+1]+1] | i in 1..numClasses], {t})
+				+	among([teacher_ids[timetable[i, j+2]+1] | i in 1..numClasses], {t})
+				+	among([teacher_ids[timetable[i, j+3]+1] | i in 1..numClasses], {t})
+				< 4
+				)
+			);
 
-/*
-% minimization version of the problem - give coordinators early slots
-var int: obj = sum(c in coordinators, j in 1..numSubjects)(if (tenA[j] == c) then j else 0 endif) 
-			 + sum(c in coordinators, j in 1..numSubjects)(if (tenB[j] == c) then j else 0 endif)
-			 + sum(c in coordinators, j in 1..numSubjects)(if (nineA[j] == c) then j else 0 endif)
-			 + sum(c in coordinators, j in 1..numSubjects)(if (nineB[j] == c) then j else 0 endif);
-*/
+% similarly constrain one empty slot at a time for each class
+constraint forall(i in 1..numClasses, j in 1..numSlots-1)
+					(
+						if (timetable[i, j] == 0)
+						then not (timetable[i, j+1] == 0)
+						else true
+						endif
+						);
+
 
 % PRINT OUT THE SOLUTION
 output["------------------------------------------------------------\ntimeslots\t"
@@ -88,7 +102,8 @@ output["------------------------------------------------------------\ntimeslots\
 	%	["\(timeSlots[i])\t\(teacher_avatars[tenA[i]+1])\t\(teacher_avatars[tenB[i]+1])\t\(teacher_avatars[nineA[i]+1])\t\(teacher_avatars[nineB[i]+1])\n" | i in slots]
 	%	["\(timeSlots[i])\t\(tenA[i])\t\(tenB[i])\t\(nineA[i])\t\(nineB[i])\n" | i in slots]
 		["\n\(timeSlots[j])\t" ++ concat(["\(teacher_avatars[timetable[i, j]+1])\t" | i in 1..numClasses ]) | j in slots]
-	%	["\(timetable[i,j])" | j in slots, i in 1..numClasses]
+	%	["\n\(timeSlots[j])\t" ++ concat(["\(timetable[i, j])-" ++ "\(teacher_ids[timetable[i, j]+1])\t" | i in 1..numClasses ]) | j in slots]
+
 		)
 	++
 	"\n------------------------------------------------------------\n"
