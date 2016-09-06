@@ -29,13 +29,13 @@ id2t = {}
 
 # initialize the EMPTY category (empty slot) with ID 0  (dummy teacher avatar)
 id2t[0] = '--'
-t_id = 1		# initialize id to 1, since 0 is reserved
+t_id = 0		# initialize id to 0, this will promptly be increased to 1 at the first run of the next loop. 0 if forbidden and reserved
 
 # loop through the teacher names for rows which have values (ws.nrows is the upper limit)
 for r in range(1, ws.nrows):
-	teachers_list = map(str, ws.row_values(r))[1:]
-	# Now iterate through teachers_list and put the entries in the dictionaries
-	for classID, teacher in enumerate(teachers_list):
+	excel_row = map(str, ws.row_values(r))[1:]
+	# Now iterate through excel_row and put the entries in the dictionaries
+	for classID, teacher in enumerate(excel_row):
 		# increment t_id and update id2t to map t_id to 'teacher'
 		if (teacher != ''):
 			t_id += 1
@@ -46,21 +46,47 @@ for r in range(1, ws.nrows):
 
 ## Generate the dzn file
 f_dzn = open('data.dzn', 'w')
-f_dzn.write('numSlots = ' + str(numSlots) + '\n')
+f_dzn.write('numSlots = ' + str(numSlots) + ';\n')
 
 # TODO: write the timeslots using a for loop
 
 # write teacher avatars
-f_dzn.write('num_avatars = ' + str(t_id) + '\n')
-f_dzn.write('teacher_avatars = {')
+f_dzn.write('num_avatars = ' + str(t_id) + ';\n')
+f_dzn.write('teacher_avatars = [')
 for avatar in teacher_avatars:
-	f_dzn.write(avatar + ', ')
-f_dzn.write('}\n')
+	f_dzn.write('"' + avatar + '", ')
+
+f_dzn.write('];\n')
+
+# teacher_ids - very important so that there are no conflicts between the same teachers
+
 
 # TODO: How to handle coordinators, special cases?
 
 # subjects
-f_dzn.write('numSubjects = ')
+f_dzn.write('teachers_assignments = [')
+for cl in range(numClasses):
+	f_dzn.write('{')
+	for x in teachers_assignments[cl]:
+		f_dzn.write(str(x) + ', ')
+	f_dzn.write('},')
+
+f_dzn.write('];\n')
+
+# classes and names
+f_dzn.write('numClasses = ' + str(numClasses) + ';\n')
+f_dzn.write('class_names = [')
+for cl in classes:
+	f_dzn.write('"' + cl + '",')
+
+f_dzn.write('];\n')
+
+# finally close the file and it's ready to roll
+f_dzn.close()
+
+'''
+ * RUN THE CODE AND PRODUCE OUTPUT, CLEANUP AFTERWARDS
+'''
 
 ## READ IN INPUTS FROM MZN OUTPUT FILE
 f = open('out.txt')
