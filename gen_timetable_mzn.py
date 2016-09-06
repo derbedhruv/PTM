@@ -10,6 +10,8 @@
 from openpyxl import Workbook
 import xlrd
 
+print "reading in..."
+
 ## READ INPUTS FROM XLSX FILE
 wb = xlrd.open_workbook('./classes_input.xlsx')		# name is fixed
 ws = wb.sheet_by_index(0)							# Sheet1 is fixed
@@ -20,11 +22,15 @@ numSlots = numClasses + 2		# arbitrary and emperical
 
 # initialize teachers_assignments, an empty list numClasses no of lists
 teachers_assignments = [[] * 1 for i in range(numClasses)]
-teacher_avatars = []
+teacher_avatars = ['--']
+teacher_ids = [0]
 
 # Now we read in row by row, ignoring the first col
-# Read into a dictionary - which will map teacher_id to ['teacher names'] 
+# Read into 2 dictionaries - 
+# one will map distinct ['teacher names'] to a single ID (which will be the first id it is given)
+# and another which will map teacher_id to ['teacher names'] 
 # this one will map more than one ID to a name, allowing for multiple teacher avatars
+t2id = {}
 id2t = {}
 
 # initialize the EMPTY category (empty slot) with ID 0  (dummy teacher avatar)
@@ -43,15 +49,41 @@ for r in range(1, ws.nrows):
 			teacher_avatars.append(teacher)
 			# And now we append the current teacher_id into the list keeping track of it
 			teachers_assignments[classID].append(t_id)
+			# check if the id exists already, if so append to teacher_ids
+			try:
+				if (t2id[teacher]):
+					# this is the case where the id exists previously
+					# so append to teacher_ids the value of t2id[teacher]
+					teacher_ids.append(t2id[teacher])
+			except KeyError:
+				# there is no key for this teacher, so create it
+				t2id[teacher] = t_id
+				teacher_ids.append(t_id)
+
 
 ## Generate the dzn file
 f_dzn = open('data.dzn', 'w')
 f_dzn.write('numSlots = ' + str(numSlots) + ';\n')
 
 # TODO: write the timeslots using a for loop
+time_hour = 8
+time_min = 50
+timeslot_interval = 10	# minutes
+
+f_dzn.write('timeSlots = [')
+for i in range(numSlots):
+	if (time_min + 10 == 60):
+		time_min = 0
+		time_hour += 1
+	else:
+		time_min += 10
+
+	f_dzn.write('"' + str(time_hour) + ":" + str(time_min) + '", ')
+
+f_dzn.write('];\n')
 
 # write teacher avatars
-f_dzn.write('num_avatars = ' + str(t_id) + ';\n')
+f_dzn.write('num_avatars = ' + str(t_id+1) + ';\n')
 f_dzn.write('teacher_avatars = [')
 for avatar in teacher_avatars:
 	f_dzn.write('"' + avatar + '", ')
@@ -59,7 +91,11 @@ for avatar in teacher_avatars:
 f_dzn.write('];\n')
 
 # teacher_ids - very important so that there are no conflicts between the same teachers
+f_dzn.write('teacher_ids = [')
+for t in teacher_ids:
+	f_dzn.write(str(t) + ', ')
 
+f_dzn.write('];\n')
 
 # TODO: How to handle coordinators, special cases?
 
@@ -83,6 +119,7 @@ f_dzn.write('];\n')
 
 # finally close the file and it's ready to roll
 f_dzn.close()
+print "generated the minizinc data.dzn file successfully!"
 
 '''
  * RUN THE CODE AND PRODUCE OUTPUT, CLEANUP AFTERWARDS
