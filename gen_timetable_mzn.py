@@ -7,6 +7,7 @@
  Then take the output and convert it back into an xlsx file
 
 '''
+import os
 from openpyxl import Workbook
 import xlrd
 
@@ -131,7 +132,7 @@ def calculate_timetable(excel_file_input):
 	# And dump the contents into a file out.txt
 	print "running model on minizinc..."
 	import subprocess
-	subprocess.call(['./runmzn.sh'])
+	subprocess.call([os.path.join(os.path.dirname(os.path.abspath(__file__)), 'runmzn.sh')])
 
 	print "success! Now generating the excel file..."
 
