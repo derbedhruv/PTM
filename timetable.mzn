@@ -1,16 +1,15 @@
 /* Highschool parent-teacher meet scheduler
 --------------------------------------------------------
  * Author: Dhruv Joshi
+
  * Constraint optimization in minizinc for the purpose of scheduling
  * a parent-teacher meet. Constraints:
- 	- Multiple teachers may teach multiple classes
+ 	- Multiple teachers may teach multiple classes ('class' as in 'classroom')
 	- All classes have the PTM on the same day
 	- No two teachers can be at the same class at the same time slot
 	- Each teacher shall visit only the class they teach, and only in one timeslot
-	- empty slots are allowed
+	- empty slots are allowed but no two shall be continuous in a class
 
- * Presently this only deals with 4 classes - 10 (A,B) and 9 (A,B) and 10 subjects 
- * (and hence teachers) per class. The scope will be expanded to multiple classes.
 */ 
 include "globals.mzn"; % standard
 

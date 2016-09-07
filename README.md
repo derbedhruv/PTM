@@ -5,6 +5,8 @@ Parent Teacher Meeting scheduling Constraint optimization
 
 Using [Minizinc](http://minizinc.org/) to solve the NP-hard problem of scheduling timings for parent-teacher meetings in designated slots at a high school. Pre-processing, parsing information and generation of the minizinc code is done using python.
 
+A sample XLSX input file is given as `classes_input.xlsx`.
+
 To run simply run the file `gen_timetable_mzn.py`.
 
  * This would first generate the file data.dzn, which is a parsing of the information from a fixed excel file `classes_input.xlsx`  to a format usable by minizinc.
