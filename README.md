@@ -1,6 +1,8 @@
 # Constraint Optimization
 Parent Teacher Meeting scheduling Constraint optimization
 
+(This project was done as volunteer work for a high school, the code and live program is available for anyone to use under the [MIT license](https://opensource.org/licenses/MIT))
+
 Using [Minizinc](http://minizinc.org/) to solve the NP-hard problem of scheduling timings for parent-teacher meetings in designated slots at a high school. Pre-processing, parsing information and generation of the minizinc code is done using python.
 
 To run simply run the file `gen_timetable_mzn.py`.
