@@ -22,7 +22,7 @@ def calculate_timetable(excel_file_input):
 
 	classes = map(str, ws.row_values(0))[1:]			# list of classes, first col is label 'Subject'
 	numClasses = len(classes)
-	numSlots = ws.nrows+5		# arbitrary and emperical -> equal to number of distinct subjects
+	numSlots = ws.nrows+2		# arbitrary and emperical -> equal to number of distinct subjects
 
 	# initialize teachers_assignments, an empty list numClasses no of lists
 	teachers_assignments = [[] * 1 for i in range(numClasses)]
@@ -140,27 +140,19 @@ def calculate_timetable(excel_file_input):
 
 	## READ IN INPUTS FROM MZN OUTPUT FILE
 	f = open(os.path.join(current_directory,'out.txt'))
-
 	# Then we read each class's assignments in order
 	teachers = []	# will be a list of lists, containing each class's teacher assignments
 	time_slots = f.readline().strip().split()		# read in the timeslots from the out.txt file itself
-
 	for cl in range(numClasses):
 		teachers.append(f.readline().strip().split())
-
 	## GENERATE EXCEL FILE REPRESENTATION OF THE SAME
 	wb = Workbook()
 	filename = 'uploaded/timetable.xlsx'
-
 	ws = wb.active
 	ws.title = "PTM_assignments"
-
 	# start appending line by line
 	ws.append([""] + classes)		# names of classes
 	for j in range(numSlots):
 		ws.append([time_slots[j]] + [ id2t[int(teachers[i][j])] for i in range(numClasses) ])
-
 	wb.save(filename = os.path.join(current_directory, filename))
-
-
 	print "Finished! Please check the file timetable.xlsx for the final output!"

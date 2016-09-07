@@ -72,6 +72,7 @@ constraint nineA[1] = 6;
 */
 
 % 5. No 3 consecutive slots for the same teacher
+/*
 constraint forall(j in 1..numSlots-3)
 			(
 				forall(t in 1..num_avatars)
@@ -84,6 +85,7 @@ constraint forall(j in 1..numSlots-3)
 				< 4
 				)
 			);
+*/
 
 % similarly constrain one empty slot at a time for each class
 constraint forall(i in 1..numClasses, j in 1..numSlots-1)
