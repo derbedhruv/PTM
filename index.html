@@ -1,8 +1,37 @@
-    <!doctype html>
-    <title>Upload new File</title>
-    <h1>Timetable scheduling application</h1>
-    <h2>Upload new File</h2>
-    <form action="" method=post enctype=multipart/form-data>
-      <p><input type=file name=file>
-         <input type=submit value=Calculate!>
-    </form>
+<!doctype html>
+<title>Scheduling application prototype</title>
+
+<body>
+	<h1>Timetable scheduling application</h1>
+	<h2>Upload new File</h2>
+	<form action="" method=post enctype=multipart/form-data>
+	  <p><input type=file name=file>
+	     <input type=submit value=Calculate!>
+	</form>
+		<h2>Verify new File - choose file!</h2>
+	<form action="" method=post enctype=multipart/form-data>
+	  <input type=file name=file>
+	</form>
+</body>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.full.min.js"></script>
+<script type="text/javascript">
+    function handleFile(e) {
+      var files = e.target.files;
+      var i,f;
+      for (i = 0, f = files[i]; i != files.length; ++i) {
+        var reader = new FileReader();
+        var name = f.name;
+        reader.onload = function(e) {
+          var data = e.target.result;
+
+          var workbook = XLSX.read(data, {type: 'binary'});
+
+          /* DO SOMETHING WITH workbook HERE */
+          console.log('finished reading in workbook...');
+        };
+        reader.readAsBinaryString(f);
+      }
+    }
+    var filebox = document.getElementById('fname');
+    filebox.addEventListener('change', handleFile, false);
+</script>
