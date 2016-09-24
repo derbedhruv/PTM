@@ -1,4 +1,5 @@
 # http://flask.pocoo.org/docs/0.11/patterns/fileuploads/
+# TODO: Add options for changing constraints
 import os
 from flask import Flask, request, redirect, url_for, Response
 from werkzeug.utils import secure_filename
