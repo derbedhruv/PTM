@@ -1,6 +1,6 @@
 # http://flask.pocoo.org/docs/0.11/patterns/fileuploads/
 import os
-from flask import Flask, request, redirect, url_for
+from flask import Flask, request, redirect, url_for, Response
 from werkzeug.utils import secure_filename
 from flask import send_from_directory
 from gen_timetable_mzn import calculate_timetable
@@ -37,7 +37,9 @@ def upload_file():
 
             return redirect(url_for('uploaded_file',
                                     filename='timetable.xlsx'))
-    return '''
+
+    return Response(open('index.html').read(), mimetype="text/html")
+'''
     <!doctype html>
     <title>Upload new File</title>
     <h1>Timetable scheduling application</h1>
