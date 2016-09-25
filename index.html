@@ -16,7 +16,7 @@
 	<form action="" method=post enctype=multipart/form-data>
 	  <input type=file name=file id="fname">
     <span id="processng" style="display:none">Processing...</span>
-    <p id="message"></p>
+    <span id="message"></span>
 	</form>
 </body>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.full.min.js"></script>
@@ -26,7 +26,9 @@
         document.getElementById("fname").style.display = 'none';
         document.getElementById("processng").style.display = 'block';
       } else {
-
+        document.getElementById("fname").style.display = 'block';
+        document.getElementById("processng").style.display = 'none';
+        document.getElementById("message").innerHTML = '';
       }
     }
 
@@ -34,6 +36,8 @@
       showprocessing(true);
       var files = e.target.files;
       var i,f;
+      var errorCount = false;
+
       for (i = 0, f = files[i]; i != files.length; ++i) {
         var reader = new FileReader();
         var name = f.name;
@@ -43,8 +47,8 @@
           var workbook = XLSX.read(data, {type: 'binary'});
 
           /* DO SOMETHING WITH workbook HERE */
-          console.log('finished reading in workbook...');
-          showprocessing(false);
+          // console.log('finished reading in workbook...');
+          // showprocessing(false);
 
           /* begining processing the sheet */
           // console.log(workbook.SheetNames);
@@ -54,19 +58,33 @@
           var alpha = 65, count = 2;  // start with A2 because A1 will be empty
           var cell = String.fromCharCode(alpha) + count;
 
+          // TODO: Make it smarter by first seeing the no of rows and columns based on entries on header row and the left side row, which will allow the system to account for empty cells
           while (worksheet[cell] != undefined) {
+            dict = {};  // hashtable, refresh for each row
             while (worksheet[cell] != undefined) {
-              console.log(worksheet[cell].v);
+              var entry = worksheet[cell].v;
+              if (dict[entry] == 1 && entry != '--') {
+                document.getElementById("message").innerHTML += '<p style="color:red">Check ' + cell + '</p>';
+                console.log("Repitition of " + entry + " at " + cell);
+                errorCount = true;
+              } else {
+                dict[entry] = 1;
+              }
+              
               alpha++;
               cell = String.fromCharCode(alpha) + count;
-              // console.log(cell);
             }
             alpha = 65;
             count++;
             cell = String.fromCharCode(alpha) + count;
-            // console.log(cell);
           }
         };
+
+        if (errorCount == false) {
+          console.log("Finshed and all OK");
+          document.getElementById("message").innerHTML += '<p style="color:green">All OK!</p>';
+        }
+        
         reader.readAsBinaryString(f);
       }
     }
