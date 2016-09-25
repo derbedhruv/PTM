@@ -9,13 +9,29 @@
 	     <input type=submit value=Calculate!>
 	</form>
 		<h2>Verify new File - choose file!</h2>
+    <ul>
+      <li>Make sure that the sheet you want to check is the first worksheet of the XLSX file!</li>
+      <li>Also make sure that none of the timetable entries is EMPTY - if it's an open slot please make it have the '--' characters!</li>
+    </ul>
 	<form action="" method=post enctype=multipart/form-data>
-	  <input type=file name=file>
+	  <input type=file name=file id="fname">
+    <span id="processng" style="display:none">Processing...</span>
+    <p id="message"></p>
 	</form>
 </body>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.full.min.js"></script>
 <script type="text/javascript">
+    function showprocessing(choice) {
+      if (choice == true) {
+        document.getElementById("fname").style.display = 'none';
+        document.getElementById("processng").style.display = 'block';
+      } else {
+
+      }
+    }
+
     function handleFile(e) {
+      showprocessing(true);
       var files = e.target.files;
       var i,f;
       for (i = 0, f = files[i]; i != files.length; ++i) {
@@ -28,6 +44,28 @@
 
           /* DO SOMETHING WITH workbook HERE */
           console.log('finished reading in workbook...');
+          showprocessing(false);
+
+          /* begining processing the sheet */
+          // console.log(workbook.SheetNames);
+          var first_sheet_name = workbook.SheetNames[0];
+          var worksheet = workbook.Sheets[first_sheet_name];
+
+          var alpha = 65, count = 2;  // start with A2 because A1 will be empty
+          var cell = String.fromCharCode(alpha) + count;
+
+          while (worksheet[cell] != undefined) {
+            while (worksheet[cell] != undefined) {
+              console.log(worksheet[cell].v);
+              alpha++;
+              cell = String.fromCharCode(alpha) + count;
+              // console.log(cell);
+            }
+            alpha = 65;
+            count++;
+            cell = String.fromCharCode(alpha) + count;
+            // console.log(cell);
+          }
         };
         reader.readAsBinaryString(f);
       }
