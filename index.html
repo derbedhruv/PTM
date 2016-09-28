@@ -33,27 +33,22 @@
 
 <p>My mom is vice-principal at a high school called <a href="http://www.wisdomworldschool.in/">Wisdom World</a> in Wakad, Pune. She needed to schedule a parent-teacher meeting for all teachers (from classes 3 to 10) and it was turning out to be a major headache to do manually (which is how they have been doing it for years!).</p>
 
-<p>I was at home at the time, I had recently quit my job at Hyderabad to be at home before I would fly out to Stanford, California for the graduate program I'd be starting in the fall of 2016. I had been reading a lot about algorithms and discrete optimization (the coursera course especially) and I was aching to try things out in the real world, so I told my mum I'd make a system which would ease her job and the many such optimization jobs to come.</p>
+<p>I was at home at the time, I had recently <a href="http://www.derbedhruv.com/srujana-center-for-innovation">quit my job at Hyderabad</a> to be at home before I would fly out to Stanford, California for the graduate program I'd be starting in the fall of 2016. I had been reading a lot about algorithms and discrete optimization (the <a href="https://www.coursera.org/learn/modeling-discrete-optimization/">coursera course</a> especially) and I was aching to try things out in the real world using the things I'd learned, so I told my mum I'd make a system which would ease her job and the many such optimization jobs to come.</p>
 
 <h3>
-<a id="designer-templates" class="anchor" href="#designer-templates" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Designer Templates</h3>
+<a id="understanding-the-users-perspective" class="anchor" href="#understanding-the-users-perspective" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Understanding the user's perspective</h3>
 
-<p>We’ve crafted some handsome templates for you to use. Go ahead and click 'Continue to layouts' to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved.</p>
-
-<h3>
-<a id="creating-pages-manually" class="anchor" href="#creating-pages-manually" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Creating pages manually</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+<p>I planned to write the backend in python and use flask to serve the website. The only information this system would be the timetable of teachers indicating which subject they taught and which class. Initially I had thought I would make a simple and beautiful bootstrap-based online entry system by which the timetable could be populated by the teachers. However, a quick conversation with my mum told me that the teachers were extremely used to dealing with MS Excel. It would be too much to expect them to have to re-enter data and that too in a webapp they weren't comfortable using. So, taking advantage of the <a href="https://openpyxl.readthedocs.io/en/default/">openpyxl library</a>, I wrote up a simple "black-box" system by which they'd upload an xlsx file with the teacher-class table, which would be processed on cloud and would spit out another XLSX file with the required timetable schedule, all done!</p>
 
 <h3>
-<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authors and Contributors</h3>
+<a id="un-intended-impact-of-the-work" class="anchor" href="#un-intended-impact-of-the-work" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Un-intended Impact of the Work</h3>
 
-<p>You can @mention a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor’s GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<p>We kept finding that the optimization would severely slow down as the number of classes included was increased (which is expected for larger instances in these class of problems) but in an unnatural way. After a lot of debugging, we discovered that there were two teachers (the computer course teachers in fact!) that were over-assigned classes and this was making the scheduling task very hard because it was becoming combinatorially increasingly difficult to ensure they didn't have any clashes. This has actually led to a proposal to hire more computer teachers for the school! It's so gratifying that there was so much benefit by this simple project that was just done for fun!</p>
 
 <h3>
-<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Support or Contact</h3>
+<a id="under-the-hood" class="anchor" href="#under-the-hood" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Under the Hood</h3>
 
-<p>Having trouble with Pages? Check out our <a href="https://help.github.com/pages">documentation</a> or <a href="https://github.com/contact">contact support</a> and we’ll help you sort it out.</p>
+<p>Everything runs in python. The optimization is run in minizinc - the <code>.dzn</code> file is produced by a python code on-the-fly and run with the <code>.mzn</code> file. The output from this is written to a temporary file, which is parsed by the same python routine and used by it to generate the excel file. The main file to read is <a href="https://github.com/derbedhruv/PTM/blob/master/gen_timetable_mzn.py">gen_timetable.py</a>.</p>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/derbedhruv">derbedhruv</a></p>
